@@ -1,0 +1,17 @@
+ARG BASE_IMAGE=openworm/openworm:0.9.8
+FROM ${BASE_IMAGE}
+
+# Remove upstream c302 completely so only the local c302 copy can be imported
+RUN sudo pip uninstall -y c302 --break-system-packages && rm -rf $HOME/c302
+
+# Copy local c302 and install in editable mode (dependencies are already in the base image)
+COPY ./c302 $HOME/c302
+RUN cd $HOME/c302 && \
+  sudo pip install --no-deps --no-build-isolation -e . --break-system-packages && \
+  sudo chown -R $USER:$USER $HOME/c302
+
+# Copy local master script
+COPY ./master_openworm.py $HOME/master_openworm.py
+RUN sudo chown $USER:$USER $HOME/master_openworm.py
+
+RUN echo "Built local OpenWorm Docker image with custom c302!"

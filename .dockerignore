@@ -4,3 +4,6 @@
 .gitignore
 .openworm.yml
 output
+c302/.git
+**/__pycache__
+**/*.pyc

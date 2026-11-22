@@ -107,13 +107,16 @@ if "NOC302" in os.environ:
 else:
     noc302 = "worm" not in configuration
 
+c302params = os.environ.get("C302_PARAMS", "C2")
+reference = os.environ.get("REFERENCE", "FW")
+
 PARAMETERS = {
     "duration": sim_duration,
     "dt": 0.005,
     "dtNrn": 0.05,
     "logstep": 100,
-    "reference": "FW",  # "TargetMuscle",
-    "c302params": "C2",
+    "reference": reference,  # "TargetMuscle",
+    "c302params": c302params,
     "verbose": False,
     "device": "CPU",
     "configuration": configuration,
@@ -121,6 +124,11 @@ PARAMETERS = {
     "datareader": "UpdatedSpreadsheetDataReader2",
     "outDir": OW_OUT_DIR,
 }
+
+if not noc302:
+    import c302
+
+    print("Using c302 v%s from %s" % (c302.__version__, c302.__file__))
 
 my_env = os.environ.copy()
 DISPLAY = ":44"

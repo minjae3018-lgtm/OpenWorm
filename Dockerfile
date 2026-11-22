@@ -55,12 +55,10 @@ RUN sudo pip install neuron==8.2.6  --break-system-packages
 
 
 ################################################################################
-########     Install c302 for building neuronal network models
+########     Install c302 Python dependencies (c302 source copied near the end)
 
-RUN git clone https://github.com/openworm/c302.git && \
-  cd c302 && \
-  git checkout ow-0.9.8 && \
-  sudo pip install .  --break-system-packages
+RUN sudo pip install --break-system-packages \
+  numpy xlrd xlwt "pyNeuroML>=1.3.15" WormNeuroAtlas "cect>=0.3.1"
 
 # Note: pyNeuroML installed with the above library
 
@@ -120,6 +118,15 @@ RUN cd sibernetic && \
 ########     Set up JupyterLab
 
 #RUN sudo pip install notebook jupyterlab --break-system-packages
+
+
+################################################################################
+########     Install local c302 for building neuronal network models
+
+COPY ./c302 $HOME/c302
+RUN cd $HOME/c302 && \
+  sudo pip install --no-deps --no-build-isolation -e . --break-system-packages && \
+  sudo chown -R $USER:$USER $HOME/c302
 
 
 ################################################################################
